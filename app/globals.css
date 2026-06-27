@@ -1,0 +1,420 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ─── Sistema de diseño Premium (Midnight/Glass) ─── */
+@theme {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-text-heading: var(--text-heading);
+  --color-text-body: var(--text-body);
+  --color-text-muted: var(--text-muted);
+  --color-btn-primary: var(--btn-primary-bg);
+  --color-btn-primary-fg: var(--btn-primary-text);
+  --color-error: #ef4444;
+  --color-error-muted: color-mix(in srgb, #ef4444 15%, transparent);
+  --color-success: #10b981;
+  --color-success-muted: color-mix(in srgb, #10b981 15%, transparent);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 220ms;
+  --duration-slow: 380ms;
+  --shadow-elevated: 0 24px 48px -12px rgb(0 0 0 / 0.6);
+  --shadow-card-hover: 0 16px 32px -12px rgb(0 0 0 / 0.5);
+  --shadow-glow: 0 0 20px 0px color-mix(in srgb, var(--btn-primary-bg) 40%, transparent);
+}
+
+/* Modo claro */
+:root {
+  --canvas: #f8fafc;
+  --surface: #ffffff;
+  --surface-hover: #f1f5f9;
+  --border: #e2e8f0;
+  --border-subtle: #f1f5f9;
+  --text-heading: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --btn-primary-bg: #4f46e5;
+  --btn-primary-text: #ffffff;
+  --overlay-bg: rgb(15 23 42 / 0.7);
+}
+
+/* Modo oscuro (predeterminado en la app) */
+.dark {
+  --canvas: #000000;
+  --surface: #111111;
+  --surface-hover: #1a1a1a;
+  --border: #333333;
+  --border-subtle: #222222;
+  --text-heading: #ffffff;
+  --text-body: #ffffff;
+  --text-muted: #ffffff;
+  --btn-primary-bg: #222222;
+  --btn-primary-text: #ffffff;
+  --overlay-bg: rgb(0 0 0 / 0.85);
+}
+
+/* ─── Keyframes ─── */
+@keyframes ui-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ui-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ui-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ui-message-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ui-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@layer base {
+  html {
+    @apply antialiased scroll-smooth;
+  }
+
+  body {
+    @apply bg-canvas text-white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-subtle);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--text-heading);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Botones */
+  .btn-primary {
+    @apply text-white font-semibold rounded-xl bg-btn-primary border border-border;
+    transition:
+      transform var(--duration-fast) var(--ease-spring),
+      background-color var(--duration-normal) ease;
+    @apply hover:bg-surface-hover disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-primary:active:not(:disabled) {
+    transform: scale(0.97) translateY(0);
+  }
+
+  .btn-secondary {
+    @apply bg-surface border border-border text-text-heading font-medium rounded-xl;
+    transition:
+      background-color var(--duration-normal) ease,
+      border-color var(--duration-normal) ease,
+      transform var(--duration-fast) var(--ease-spring);
+    @apply hover:bg-surface-hover disabled:opacity-50;
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary:active:not(:disabled) {
+    transform: scale(0.97) translateY(0);
+  }
+
+  .alert-error {
+    @apply bg-error-muted border border-error text-error text-sm p-3 rounded-lg;
+    animation: ui-slide-up var(--duration-normal) var(--ease-out-expo) both;
+  }
+
+  .alert-success {
+    @apply bg-success-muted border border-success text-success text-sm p-3 rounded-lg;
+    animation: ui-slide-up var(--duration-normal) var(--ease-out-expo) both;
+  }
+
+  .input-field {
+    @apply w-full bg-canvas border border-border rounded-lg text-text-heading px-3 py-2;
+    @apply placeholder:text-text-muted;
+    transition:
+      border-color var(--duration-normal) ease,
+      box-shadow var(--duration-normal) ease;
+  }
+
+  .input-field:focus {
+    @apply outline-none border-text-heading;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--text-heading) 12%, transparent);
+  }
+
+  .card {
+    @apply bg-surface border border-border rounded-2xl relative overflow-hidden;
+    transition:
+      border-color var(--duration-normal) ease,
+      box-shadow var(--duration-normal) ease,
+      transform var(--duration-normal) var(--ease-out-expo);
+  }
+
+  /* Efecto sutil de borde brillante en tarjetas interactivas */
+  .card-interactive {
+    @apply hover:-translate-y-1;
+  }
+
+  .card-interactive::after {
+    content: '';
+    @apply absolute inset-0 border border-white/0 rounded-2xl pointer-events-none transition-colors duration-300;
+  }
+
+  .card-interactive:hover::after {
+    @apply border-white/10;
+  }
+
+  .card-interactive:hover {
+    border-color: color-mix(in srgb, var(--btn-primary-bg) 30%, var(--border));
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Cajas de Íconos Premium */
+  .icon-glow-box {
+    @apply flex items-center justify-center rounded-xl text-white bg-surface border border-border;
+    transition: all var(--duration-normal) var(--ease-spring);
+  }
+
+  .icon-glow-box:hover {
+    transform: scale(1.05);
+    @apply bg-surface-hover;
+  }
+
+  /* Pantallas completas (gateway, onboarding) */
+  .ui-screen-overlay {
+    @apply fixed inset-0 z-[200] flex items-center justify-center;
+    background: color-mix(in srgb, var(--canvas) 92%, transparent);
+    backdrop-filter: blur(12px);
+    animation: ui-fade-in var(--duration-slow) ease both;
+  }
+
+  .ui-screen-content {
+    @apply w-full mx-auto px-6;
+    animation: ui-slide-up var(--duration-slow) var(--ease-out-expo) both;
+  }
+
+  /* Tarjetas de elección (gateway) */
+  .ui-choice-card {
+    @apply bg-surface border border-border rounded-2xl text-left;
+    transition:
+      transform var(--duration-normal) var(--ease-out-expo),
+      border-color var(--duration-fast) ease,
+      box-shadow var(--duration-normal) ease,
+      background-color var(--duration-normal) ease;
+  }
+
+  .ui-choice-card:hover {
+    transform: translateY(-5px);
+    border-color: color-mix(in srgb, var(--text-heading) 40%, var(--border));
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .ui-choice-card:active {
+    transform: translateY(-2px) scale(0.99);
+  }
+
+  .ui-choice-card .ui-choice-icon {
+    transition:
+      background-color var(--duration-normal) ease,
+      color var(--duration-normal) ease,
+      transform var(--duration-normal) var(--ease-spring);
+  }
+
+  .ui-choice-card:hover .ui-choice-icon {
+    @apply bg-btn-primary text-btn-primary-fg;
+    transform: scale(1.05);
+  }
+
+  /* Vistas internas */
+  .ui-view-enter {
+    animation: ui-slide-up var(--duration-slow) var(--ease-out-expo) both;
+  }
+
+  /* Modales */
+  .ui-modal-overlay {
+    @apply fixed inset-0 z-[100] flex items-center justify-center p-4;
+    background: var(--overlay-bg);
+    backdrop-filter: blur(10px);
+    animation: ui-overlay-in var(--duration-normal) ease both;
+  }
+
+  .ui-modal-overlay--nested {
+    @apply absolute inset-0 z-50;
+    background: color-mix(in srgb, var(--canvas) 75%, transparent);
+  }
+
+  .ui-modal-panel {
+    @apply bg-surface border border-border rounded-3xl w-full flex flex-col;
+    box-shadow: var(--shadow-elevated), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+    animation: ui-scale-in var(--duration-slow) var(--ease-out-expo) both;
+  }
+
+  .ui-modal-panel--md {
+    @apply max-w-md;
+  }
+
+  .ui-modal-panel--lg {
+    @apply max-w-lg;
+  }
+
+  .ui-modal-panel--xl {
+    @apply max-w-2xl;
+  }
+
+  /* Dropdowns y menús */
+  .ui-dropdown {
+    @apply border border-border rounded-xl shadow-lg;
+    background: var(--surface);
+    box-shadow: var(--shadow-elevated);
+    animation: ui-scale-in var(--duration-fast) var(--ease-out-expo) both;
+    transform-origin: top left;
+  }
+
+  /* Filas de tabla / lista */
+  .ui-list-row {
+    transition: background-color var(--duration-fast) ease;
+  }
+
+  .ui-list-row:hover {
+    background: var(--surface-hover);
+  }
+
+  /* Mensajes de chat */
+  .ui-message-enter {
+    animation: ui-message-in var(--duration-normal) var(--ease-out-expo) both;
+  }
+
+  /* Toast / banner superior */
+  .ui-banner-enter {
+    animation: ui-slide-down var(--duration-normal) var(--ease-out-expo) both;
+  }
+
+  /* Spinner */
+  .ui-spinner {
+    @apply rounded-full border-2 border-border border-t-text-heading animate-spin;
+  }
+
+  .ui-spinner--sm {
+    @apply w-5 h-5;
+  }
+
+  .ui-spinner--md {
+    @apply w-8 h-8;
+  }
+
+  .ui-spinner--lg {
+    @apply w-10 h-10;
+  }
+
+  /* Stagger para grids de tarjetas */
+  .ui-stagger > * {
+    animation: ui-slide-up var(--duration-slow) var(--ease-out-expo) both;
+  }
+
+  .ui-stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .ui-stagger > *:nth-child(2) { animation-delay: 70ms; }
+  .ui-stagger > *:nth-child(3) { animation-delay: 140ms; }
+  .ui-stagger > *:nth-child(4) { animation-delay: 210ms; }
+  .ui-stagger > *:nth-child(5) { animation-delay: 280ms; }
+
+  /* Panel de auth (login/register) */
+  .ui-auth-shell {
+    animation: ui-fade-in var(--duration-slow) ease both;
+  }
+
+  .ui-auth-card {
+    @apply bg-surface border border-border rounded-2xl shadow-lg;
+    animation: ui-scale-in var(--duration-slow) var(--ease-out-expo) both;
+    animation-delay: 80ms;
+  }
+
+  /* Tabs con indicador suave */
+  .ui-tab {
+    @apply pb-3 border-b-2 capitalize transition-colors duration-200;
+  }
+
+  .ui-tab--active {
+    @apply border-text-heading text-text-heading font-medium;
+  }
+
+  .ui-tab--inactive {
+    @apply border-transparent text-text-muted hover:text-text-body;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .ui-choice-card:hover {
+    transform: none;
+  }
+}
